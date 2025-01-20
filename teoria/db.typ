@@ -171,5 +171,14 @@ Abbiamo diversi tipi di views:
 Sono utili per astrazione, e per decidere a quali dati un utente è interessato.
 
 == Calcolo relazionale
-useless stuff, devo dedicare il mio tempo a rompere crittosistemi.
+Famiglia di linguaggi basata sulla logica del prim'ordine.
+- Domain Relational Calculus
+  Pro: dichiarativo, contro: espressioni senza senso,espressioni molto lunghe e verbose, inoltre è eq ad algebra relazionale.
+- Tuple Relation Calculus with Range Declarations
+  Permette di sorpassare limitazioni di DRC, ovvero fa si che una variabile sia associata ad una tupla, mentre prima 1 var per attributo. Inoltre tutti i dati provengono dallo stesso db.
+Non può esprimere unione, però si possono fare query ricorsive.
+
+== SQL
+
+
 
