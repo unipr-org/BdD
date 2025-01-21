@@ -300,3 +300,50 @@ WHERE 90  <= ALL (SELECT C.Power
               WHERE C.Plate = IN.Plate
               AND I.CodeAcc = IN.CodeAcc
              ) 
+
+--Write a SQL query that returns the code and name
+--of those who own more than one car.
+SELECT O.Code, O.Name
+FROM OWNERS AS O, CARS AS C
+WHERE C.Owner = O.Code 
+GROU BY O.Code, O.Name
+HAVING COUNT(*) > 1
+
+
+--Last schema (i hope)
+--NOVEL(CodeNov, Title, Author, Year)
+--CHARACTERS(Name, CodeNov, Gender, Role)
+--AUTHORS(Name, YearB, YearD, Country)
+--FILM(Code, Title, Director, Producer,
+--Year, Novel)
+SELECT C.Name, COUNT(*) AS AppearanceNumber
+FROM CHARACTERS AS C, NOVEL S N
+WHERE N.CodeNov = C.CodeNov
+GROUP BY C.Name
+HAVING COUNT(*) > 1
+
+--Write a SQL query that returns the title of the italian
+--novels from which more than one film has been
+--made.
+SELECT N.Title 
+FROM NOVEL AS N, AUTHORS AS A, FILM AS F 
+WHERE N.Author = A.Name AND A.Country "Italy" AND F.Novel = N.CodeNov
+GROUP BY N.CodeNov, N.Title
+HAVING COUNT(*) > 1
+
+--Write a SQL query that returns the title of the
+--novels from which no films were derived.
+SELECT N.Title 
+FROM NOVEL AS N 
+WHERE NOT EXIST (
+                SELECT *
+                FROM FILM AS F
+                WHERE F.Novel = N.CodeNov)
+
+--Write a SQL query that returns the title of novels
+--whose main characters are all female.
+SELECT N.Title, N.CodeNov
+FROM NOVEL AS N
+WHERE "F" = ALL(SELECT C.GENDER
+                FROM CHARACTERS AS C
+                WHERE N.CodeNov = C.CodeNov)
