@@ -179,6 +179,37 @@ Famiglia di linguaggi basata sulla logica del prim'ordine.
 Non può esprimere unione, però si possono fare query ricorsive.
 
 == SQL
+Vedere slide.
+
+== Architettura dei DBMS
+Un Database Management system è un software usato per creare e gestire database.
+
+Ci sono 3 componenti principali
+1. Processore delle query: Parsa,Preprocessa(trasforma in algebra) e ottimizza, L'engine di esecuzione esegue le query interagendo con buffer,scheduler,log manager...
+2. Manager delle risorse. Solitamente i dati del database risiedono in memoria secondaria per garantirne la persistenza, questo gestore di occupa di di storare e accedere velocemente a queste risorse.
+Include la struttura dati index.. il buffer manager che divide la memoria in blocchi in maniera che possano essere trasferiti in maniera efficiente e lo storage manager che ricorda le posizioni dei file sul disco e risponde alle richiest del buffer manager.
+3. Manager delle transazioni, si occupa di gestire le transazioni(più info su esse dopo).
+Contiene componenti come Il logger e il "recoverer",che per poter tornare allo stato precedente, nel caso fallisse la transazione salva su un disco tutti i cambiamenti che avvengono nel db,per poi in casi di fallimento ripristinare. Dunque prima di scrivere effettivamente sul disco che contiene i dati, questi verranno prima loggati.
+
+Inoltre si occupa di controllare che non avvengano problemi di concorrenza, ciò tramite lock delle risorse.
+Ciò nonostante possono accadere situazioni di deadlock, ovvero in cui l'esecuzione non procedede a causa del fatto che due o più azioni si stanno bloccando a vicenda. 
+
+=== Sull'implementazione del JOIN
+#link("https://bertwagner.com/tag/join-operators.html")[
+  Esattamente ciò che ha spiegato bertini.
+]
 
 
+Si tratta dell'operazione più dispendiosa in termini di tempo, ci sono 4 tecniche differenti per eseguire una JOIN. Il fatto che una venga scelta rispetto all'altra dipende da situa.
+1. Nested-loop join
+Ovvero 2 cicli for annidati in cui tutti i valori della prima tabella(outer) vengono confrontati con il primo della seconda(inner) and so on.
+In questo caso, se entrambe le tabelle sono di piccole dimensioni possiamo salvarle entrambe nella memoria principale per evitare di andare ogni volta a leggere memoria secondaria.
+Se cosi non fosse si opta per tenere in ram la tabella più pesante, in maniera da minimizzare il numero delle letture del disco secondario.
 
+
+2. Single loop join, in questo caso, abbiamo un index o (key di hashing) per uno degli attributi dei join.
+  Non ci basta altro che iterare sull'altra tabella e usare la struttura di accesso per accedere agli elementi che matchano della prima.
+3. Sort-merge Join, in breve si basa sul fatto che Le relazioni R e S siano ordinate in base ai valori di join rispetto all'attributo A e B rispettivamente. Ciò ci permette di risparmiare iterazioni.
+Di solito viene scelto quando non si tratta di equi join(altre op, tipo <,>) oppure sorting serve comunque.
+4. Hash-based Join
+Si usa le stessa funzione di hashing sugli attributi da joinare, Verranno creati N bucket per gli attributi della prima relaz, ora non ci resta che confrontare valori di hash della seconda(dunque H(s) verrà confrontato con i valori nel bucket(ci possono essere collisioni)). Dunque nel disco salverò praticamente solo i bucket senza bisogno ogni volta di riscannare memoria.
