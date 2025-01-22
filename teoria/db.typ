@@ -213,3 +213,16 @@ Se cosi non fosse si opta per tenere in ram la tabella più pesante, in maniera 
 Di solito viene scelto quando non si tratta di equi join(altre op, tipo <,>) oppure sorting serve comunque.
 4. Hash-based Join
 Si usa le stessa funzione di hashing sugli attributi da joinare, Verranno creati N bucket per gli attributi della prima relaz, ora non ci resta che confrontare valori di hash della seconda(dunque H(s) verrà confrontato con i valori nel bucket(ci possono essere collisioni)). Dunque nel disco salverò praticamente solo i bucket senza bisogno ogni volta di riscannare memoria.
+
+== Transazioni
+Vedere slide
+
+== Design del database
+Vedere Slide, la parte della generalizzazione è spiegata male, dunque per capire.
+Ci sono diversi tipi di relazione.
+1. Totali, se ogni occorrenza dell'entità genitore è almeno una delle entità figlie, ad esempio data la generalizzazione Persona e le specializzazioni maschio,femmina, una persona può essere o maschio o femmina, dunque è totale(in altre parole unione delle specializzazione = generalizzazione)
+
+2. Parziali otherwise.
+
+1. Esclusive(disjoint) ogni occorrenza del genitore è al più occorrenza di uno dei figli, dunque intersezione tra specializzazione = empty set
+2. Sovrapposte(overlap) altrimenti
